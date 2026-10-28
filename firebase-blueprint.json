@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with gamer stats and avatar",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "pseudo": { "type": "string" },
+        "avatarId": { "type": "string" },
+        "wins": { "type": "integer" },
+        "losses": { "type": "integer" },
+        "gamesPlayed": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "pseudo", "avatarId"]
+    },
+    "GameRoom": {
+      "title": "GameRoom",
+      "description": "Private lobby room for 2 players with 5-char code",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "gameType": { "type": "string" },
+        "hostUid": { "type": "string" },
+        "hostPseudo": { "type": "string" },
+        "hostAvatarId": { "type": "string" },
+        "guestUid": { "type": "string" },
+        "guestPseudo": { "type": "string" },
+        "guestAvatarId": { "type": "string" },
+        "status": { "type": "string" },
+        "gameSessionId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["code", "gameType", "hostUid", "status"]
+    },
+    "GameSession": {
+      "title": "GameSession",
+      "description": "Real-time 1v1 game session between two players",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "gameType": { "type": "string" },
+        "player1Uid": { "type": "string" },
+        "player1Pseudo": { "type": "string" },
+        "player1AvatarId": { "type": "string" },
+        "player2Uid": { "type": "string" },
+        "player2Pseudo": { "type": "string" },
+        "player2AvatarId": { "type": "string" },
+        "currentTurnUid": { "type": "string" },
+        "status": { "type": "string" },
+        "winnerUid": { "type": "string" },
+        "boardState": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "gameType", "player1Uid", "player2Uid", "status"]
+    },
+    "FriendRequest": {
+      "title": "FriendRequest",
+      "description": "Friend request between two players",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "fromUid": { "type": "string" },
+        "fromPseudo": { "type": "string" },
+        "fromAvatarId": { "type": "string" },
+        "toUid": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "fromUid", "toUid", "status"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Direct message between two players",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chatId": { "type": "string" },
+        "senderUid": { "type": "string" },
+        "receiverUid": { "type": "string" },
+        "text": { "type": "string" },
+        "roomCode": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "chatId", "senderUid", "receiverUid", "text"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Public player profiles with stats and custom avatar"
+    },
+    "/rooms/{roomCode}": {
+      "schema": { "$ref": "#/entities/GameRoom" },
+      "description": "Private rooms with 5-character codes for friends to play"
+    },
+    "/games/{gameId}": {
+      "schema": { "$ref": "#/entities/GameSession" },
+      "description": "Real-time game sessions and synchronization"
+    },
+    "/friend_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/FriendRequest" },
+      "description": "Pending and accepted friend requests"
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "1-to-1 conversation messages"
+    }
+  }
+}
